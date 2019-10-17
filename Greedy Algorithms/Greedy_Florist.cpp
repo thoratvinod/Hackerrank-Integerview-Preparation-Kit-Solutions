@@ -4,20 +4,25 @@ using namespace std;
 
 vector<string> split_string(string);
 
-// HERE IS OUR CODE
-// TIME COMPLEXITY : O(N*LOG(N))
-int minimumAbsoluteDifference(vector<int> arr) {
+// HERE IS OUR CODE;
+// TIME COMPLEXITY : O(N*LOG(N));
 
-    int n = arr.size();
-    int abs_diff;
-    sort(arr.begin(),arr.end());
-    int min=INT_MAX;
-    for(int i=0;i<n-1;i++){
-        abs_diff = abs(arr[i]-arr[i+1]);
-        if(abs_diff<min)
-            min = abs_diff;
-    }
-    return min;
+int getMinimumCost(int k, vector<int> c) {
+
+    sort(c.begin(),c.end(),greater<>());
+    int ans=0;
+    int temp = k;
+    int rate=1;
+    int n = c.size();
+    for(int i=0;i<n;i++){
+        if(!temp){
+            temp = k;
+            rate++;
+        }
+        ans += (rate*c[i]);
+        temp--;
+    }   
+    return ans;
 }
 
 // HACKERRANK JUNK CODE
@@ -25,26 +30,31 @@ int main()
 {
     ofstream fout(getenv("OUTPUT_PATH"));
 
-    int n;
-    cin >> n;
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    string nk_temp;
+    getline(cin, nk_temp);
 
-    string arr_temp_temp;
-    getline(cin, arr_temp_temp);
+    vector<string> nk = split_string(nk_temp);
 
-    vector<string> arr_temp = split_string(arr_temp_temp);
+    int n = stoi(nk[0]);
 
-    vector<int> arr(n);
+    int k = stoi(nk[1]);
+
+    string c_temp_temp;
+    getline(cin, c_temp_temp);
+
+    vector<string> c_temp = split_string(c_temp_temp);
+
+    vector<int> c(n);
 
     for (int i = 0; i < n; i++) {
-        int arr_item = stoi(arr_temp[i]);
+        int c_item = stoi(c_temp[i]);
 
-        arr[i] = arr_item;
+        c[i] = c_item;
     }
 
-    int result = minimumAbsoluteDifference(arr);
+    int minimumCost = getMinimumCost(k, c);
 
-    fout << result << "\n";
+    fout << minimumCost << "\n";
 
     fout.close();
 

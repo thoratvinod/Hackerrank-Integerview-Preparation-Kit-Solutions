@@ -6,18 +6,23 @@ vector<string> split_string(string);
 
 // HERE IS OUR CODE
 // TIME COMPLEXITY : O(N*LOG(N))
-int minimumAbsoluteDifference(vector<int> arr) {
+int luckBalance(int k, vector<vector<int>> contests) {
 
-    int n = arr.size();
-    int abs_diff;
-    sort(arr.begin(),arr.end());
-    int min=INT_MAX;
-    for(int i=0;i<n-1;i++){
-        abs_diff = abs(arr[i]-arr[i+1]);
-        if(abs_diff<min)
-            min = abs_diff;
+    sort(contests.begin(),contests.end(),greater<>());
+    int n = contests.size();
+    int ans = 0;
+    for(int i=0;i<n;i++){
+        if(contests[i][1]==1){
+            if(k>0){
+                ans += contests[i][0];
+                k--;
+            }else
+                ans -= contests[i][0];
+        }
+        else
+            ans += contests[i][0];
     }
-    return min;
+    return ans;
 }
 
 // HACKERRANK JUNK CODE
@@ -25,24 +30,27 @@ int main()
 {
     ofstream fout(getenv("OUTPUT_PATH"));
 
-    int n;
-    cin >> n;
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    string nk_temp;
+    getline(cin, nk_temp);
 
-    string arr_temp_temp;
-    getline(cin, arr_temp_temp);
+    vector<string> nk = split_string(nk_temp);
 
-    vector<string> arr_temp = split_string(arr_temp_temp);
+    int n = stoi(nk[0]);
 
-    vector<int> arr(n);
+    int k = stoi(nk[1]);
 
+    vector<vector<int>> contests(n);
     for (int i = 0; i < n; i++) {
-        int arr_item = stoi(arr_temp[i]);
+        contests[i].resize(2);
 
-        arr[i] = arr_item;
+        for (int j = 0; j < 2; j++) {
+            cin >> contests[i][j];
+        }
+
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
     }
 
-    int result = minimumAbsoluteDifference(arr);
+    int result = luckBalance(k, contests);
 
     fout << result << "\n";
 
